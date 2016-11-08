@@ -1,11 +1,10 @@
 /* Use a closure for clean scope */
 (function() {
 
-  console.log('hallo', 'limiting scroll now...');
-
-  // Make sure to only setup the listener once
+  // Make sure to only setup the limiter's listeners once
   if (! window.piratematt_ScrollLimiterSet) {
 
+    // Find the setting associated with this page
     chrome.storage.sync.get('piratematt_ScrollLimiterOptions', function(options) {
       options = options.piratematt_ScrollLimiterOptions;
       var site_keys = Object.keys(options.site_specific_options);
@@ -15,6 +14,7 @@
 
         var regex = new RegExp(site_key);
 
+        // see if the stored option applies to the current url
         if (regex.test(window.location.href)) {
           var site_option = options.site_specific_options[site_key];
 
@@ -23,6 +23,7 @@
 
           var starting_scroll = window.scrollY;
 
+          console.log('redirect_url', redirect_url);
           console.log('starting_scroll', starting_scroll);
           console.log('scroll_tolerance', scroll_tolerance);
 
@@ -37,16 +38,15 @@
             if(did_scroll) {
               did_scroll = false;
               if(window.scrollY - starting_scroll > scroll_tolerance) {
-                console.log('should redirect', window.scrollY - starting_scroll);
-                window.location.href = "http://giphy.com/search/re-focus";
+                console.log('Redirect incoming!', window.scrollY - starting_scroll);
+                window.location.href = redirect_url;
               }
             }
           }, 100);
 
-        }
-
-        break;
-      }
+          break;  // if it does match, stop looking
+        } /* end matching current url check */
+      } /* end site_key loop */
     });
 
 

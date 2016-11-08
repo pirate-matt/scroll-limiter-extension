@@ -2,7 +2,7 @@
 
   var default_options = {
     defaults: {
-      redirect_url: 'http://giphy.com/search/re-focus'
+      redirect_url: 'http://i.imgur.com/sIeO6zQ.gif'
     },
     site_specific_options: {
       '.*://.*facebook.com.*': {

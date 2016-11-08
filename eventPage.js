@@ -1,37 +1,6 @@
 (function() {
 
-  // runtime.onInstalled
-
-  /*
-  var default_options = {
-  defaults: {
-    redirect_url: 'http://giphy.com/search/re-focus'
-  },
-  site_specific_options: {
-    '*://*.facebook.com/*': {
-      allowed_scroll: 15000
-      /* redirect_url: default * /
-    },
-  }
-};
-
-
-// Check for first install
-chrome.storage.sync.get('piratematt_ScrollLimiterOptions', function(options) {
-  // if first install, store the defaults
-  if (! Object.keys(options).length) {
-    chrome.storage.sync.set({piratematt_ScrollLimiterOptions: default_options}, function() {
-      get_started();
-    });
-  }
-  // otherwise, not the first defaults, set event listeners, etc.
-  else {
-    get_started();
-  }
-});
-
-  */
-
+  // TODO - setup defaults upon install
 
 
 
@@ -41,30 +10,38 @@ chrome.storage.sync.get('piratematt_ScrollLimiterOptions', function(options) {
       options = options.piratematt_ScrollLimiterOptions;
       var site_keys = Object.keys(options.site_specific_options);
 
+      // build a list of filters so events are only handled for configured sites
       var url_filters = [];
 
       for (var i = 0; i < site_keys.length; i++) {
         var site_key = site_keys[i];
-
         url_filters.push({urlMatches: site_key})
       }
 
-      chrome.webNavigation.onCompleted.addListener(function(details) {
-        limit_page_scrolling(details.tabId);
-      }, { url: url_filters });
-
+      // Setup the (filtered) event listener
+      chrome.webNavigation.onCompleted.addListener(handle_web_nav_completion, { url: url_filters });
     });
   };
+
+  // Name the
+  var handle_web_nav_completion = function(details) {
+    chrome.tabs.executeScript(details.tabId, {file: 'limit_scroll.js'}, function(){
+      //chrome.extension.getBackgroundPage().console.log('back from executing the scroll limiter script');
+    });
+  };
+
+
+  // Setup listener for storage
+  chrome.storage.onChanged.addListener(function(changes, area_name) {
+    // if the changes are for this extension, remove the existing listener and add back in a new one, with the (potentially) new filters
+    if (changes.piratematt_ScrollLimiterOptions) {
+      chrome.webNavigation.onCompleted.removeListener(handle_web_nav_completion);
+      set_limiting_listeners();
+    }
+  });
 
 
   var handle_storage_change = function() {};
-
-  var limit_page_scrolling = function(tab_id) {
-    chrome.tabs.executeScript(tab_id, {file: 'limit_scroll.js'}, function(){
-      chrome.extension.getBackgroundPage().console.log('back from executing the scroll limiter script');
-    });
-
-  };
 
 
   set_limiting_listeners();
