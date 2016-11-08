@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Scroll-Limiter-Extension Options</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  <style>
+  body { font-size: 12px; }
+
+  div.line { margin-bottom: 1.5em; }
+
+  table.tr:hover { cursor: pointer; }
+
+  .code {
+    font-family: monospace;
+    font-weight: 100;
+    color: #000080;
+    background: #f4f4f4;
+    padding: 4px;
+    line-height: 3em;
+  }
+  </style>
+</head>
+
+<body>
+  <div class="container-fluid">
+
+    <div class="default-settings">
+      <h3>Default Settings</h3>
+
+      <form class="well">
+        <div class="form-group">
+          <label for="default-redirect-url">Default redirect url: </label>
+          <input id="DefaultRedirectUrl" class="form-control" type="url" />
+        </div>
+
+        <button id="ModifyDefaults" type="submit" class="btn btn-default">Save</button>
+      </form>
+    </div>
+
+    <div class="site-specific-settings">
+      <h3>Individual Site Settings</h3>
+
+      <div class="option-crud">
+        <h5 class="title">Add Site to Limit</h5>
+
+        <form class="form-inline option-form">
+          <div class="line">
+            <div class="form-group">
+              <label for="site-regex">Regular Expression Identifier: </label>
+              <input id="IndividualSiteRegex" class="form-control" name="site-regex" type="text" />
+              <div><small>(Ex: <strong class="code">.*://.*facebook.com.*</strong> will match any Facebook webpage.)</small></div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="form-group">
+              <label for="site-scroll">Allowed Scroll Distance: </label>
+              <div class="input-group">
+                <input id="IndividualAllowedScroll" class="form-control" name="site-scroll" type="number" />
+                <div class="input-group-addon">px</div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="line">
+            <div class="form-group">
+              <label for="site-redirect"><strong>(Optional)</strong> Specifiy Site to redirect to: </label>
+              <input id="IndividualRedirectUrl" class="form-control" name="site-redirect" type="url" />
+              <div><small><em>(Leave blank to use default)</em></small></div>
+            </div>
+          </div>
+
+          <div class="line">
+            <div class="form-group">
+              <button id="ModifyIndividual" type="submit" class="btn btn-default">Add</button>
+              <div id="status"></div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="current-options">
+        <h5 class="title">
+          Site Specific Settings
+          <button id="GetToAddForm" class="pull-right btn btn-default btn-xs"><span class="glyphicon glyphicon-plus"></span> Add Site</button>
+        </h5>
+
+        <div class="body">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th>Site regex</th>
+                <th>Allowed scroll distance</th>
+                <th>Redirect site</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="IndividualSitesTableBody">
+              <tr class="warning">
+                <td colspan="3">
+                  <em>No site options set yet!</em>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+
+    <script src="options.js"></script>
+  </div>
+</body>
+</html>

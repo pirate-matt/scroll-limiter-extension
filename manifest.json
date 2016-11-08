@@ -1,0 +1,27 @@
+{
+  "manifest_version": 2,
+
+  "name": "Scroll-Limter-Extension",
+  "short_name": "Scroll-Limiter",
+  "description": "This extension brings your focus back when you've been scrolling too long on a page (like Facebook).",
+  "version": "0.1",
+
+  "author": "https://github.com/pirate-matt",
+
+  "options_ui": {
+    "page": "options.html",
+    "chrome_style": true
+  },
+
+  "background": {
+    "scripts": ["eventPage.js"],
+    "persistent": false
+  },
+
+  "permissions": [
+    "storage",
+    "webNavigation",
+    "<all_urls>",
+    "tabs"
+  ]
+}
